@@ -29,3 +29,4 @@
             - DOCKER_INFLUXDB_INIT_ORG={{ pilzpush_database.org }}
             - DOCKER_INFLUXDB_INIT_BUCKET={{ pilzpush_database.bucket }}
             - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN={{ pilzpush_database.admin_token }}
+          restart: always
