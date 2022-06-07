@@ -4,9 +4,6 @@
   set_fact:
     pilzpush_database: "{{ pilzpush_database_defaults | combine(pilzpush_database, recursive=True) }}"
 
-- debug:
-    var: pilzpush_database
-
 - name: Create InfluxDB Directory
   file:
     state: directory
