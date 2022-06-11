@@ -1,2 +1,8 @@
 ---
 # defaults file for pilzpush-ansible-influxdb
+pilzpush_database: {}
+pilzpush_database_defaults:
+  data_dir: /var/lib/influxdb2
+  ports:
+   - "8086:8086"
+  version: latest

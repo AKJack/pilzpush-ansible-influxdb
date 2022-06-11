@@ -1,2 +1,31 @@
 ---
 # tasks file for pilzpush-ansible-influxdb
+- name: Merge defaults and vars
+  set_fact:
+    pilzpush_database: "{{ pilzpush_database_defaults | combine(pilzpush_database, recursive=True) }}"
+
+- name: Create InfluxDB Directory
+  file:
+    state: directory
+    path: "{{ pilzpush_database.data_dir }}"
+  become: yes
+
+- name: Docker Compose InfluxDB
+  docker_compose:
+    project_name: pilzpush-database
+    definition:
+      services:
+        pilzpush_database:
+          container_name: ppdb
+          ports: "{{ pilzpush_database.ports }}"
+          image: "influxdb:{{ pilzpush_database.version }}"
+          volumes:
+            - "{{ pilzpush_database.data_dir }}"
+          environment:
+            - DOCKER_INFLUXDB_INIT_MODE=setup
+            - DOCKER_INFLUXDB_INIT_USERNAME={{ pilzpush_database.username }}
+            - DOCKER_INFLUXDB_INIT_PASSWORD={{ pilzpush_database.password }}
+            - DOCKER_INFLUXDB_INIT_ORG={{ pilzpush_database.org }}
+            - DOCKER_INFLUXDB_INIT_BUCKET={{ pilzpush_database.bucket }}
+            - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN={{ pilzpush_database.admin_token }}
+          restart: always
